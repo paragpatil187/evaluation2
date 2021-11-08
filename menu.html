@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #container{
+        display: grid;
+        grid-template-columns: 25% 25% 25% 25%;
+    }
+    #navbar{
+        padding: 10px;
+        border:1px solid black;
+        margin:auto;
+        background-color: blanchedalmond;
+
+    }
+    #li{
+        display: flex;
+        flex-direction: row-reverse;
+        gap:10px;
+        list-style: none;
+        padding:5px;
+    }
+
+</style>
+
+<body>
+    <div id="navbar">
+    
+        <ul id="li">
+            <li>
+                <a href="signup.html"><button>SignUp</button></a>
+            </li>
+            <li>
+                <a href="Login.html"><button>Login</button></a>
+            </li>
+            <li>
+                <a href="menu.html"><button>menu</button></a>
+            </li>
+            <li>
+                <a href="index.html"><button>Home</button></a>
+            </li>
+            <li>
+                <a href="cart.html"><button>Home</button></a>
+            </li>
+        </ul>
+        
+    
+        </div>
+        
+    <div id="container">
+
+    </div>
+</body>
+</html>
+<script>
+    var meals=document.getElementById("container")
+    async function appendresult(){
+        let res=await fetch("https://www.themealdb.com/api/json/v1/1/categories.php")
+        let data=await res.json()
+        console.log(data)
+        appendtodiv(data.categories)
+
+    }
+    appendresult()
+    function appendtodiv(m){
+        
+        m.forEach((m)=>{
+            let div=document.createElement("div")
+            let image=document.createElement("img")
+        image.src=m.strCategoryThumb
+        //console.log(image)
+        let name=document.createElement("p")
+        name.innerText=m.strCategory
+        let button=document.createElement("button")
+        button.innerText="add to cart"
+        button.onclick=function(){
+            addtocart(m)
+        }
+        div.append(image,name,button)
+        meals.append(div)
+
+        });
+       
+    }
+    if(localStorage.getItem("cart")===null){
+        localStorage.setItem("cart",JSON.stringify([]))
+    }
+    function addtocart(p){
+        let product_cart=JSON.parse(localStorage.getItem("cart"));
+        product_cart.push(p);
+        localStorage.setItem("cart",JSON.stringify(product_cart));
+        console.log(product_cart)
+    }
+
+</script>
